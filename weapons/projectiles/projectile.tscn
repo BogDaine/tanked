@@ -1,0 +1,74 @@
+[gd_scene load_steps=10 format=3 uid="uid://dck000cclagb0"]
+
+[ext_resource type="Script" path="res://weapons/projectiles/projectile.gd" id="1_nq1kx"]
+[ext_resource type="Texture2D" uid="uid://bmd10mv00jrqe" path="res://weapons/sprites/projectile.png" id="2_p4ewr"]
+[ext_resource type="Texture2D" uid="uid://cheof0gcvbyif" path="res://weapons/sprites/airstrike.png" id="3_8nnri"]
+[ext_resource type="Texture2D" uid="uid://d3jb7stjg84x6" path="res://weapons/sprites/breaker.png" id="3_b4xdg"]
+[ext_resource type="Texture2D" uid="uid://buwvllikj7jm3" path="res://weapons/sprites/grenade.png" id="3_padca"]
+[ext_resource type="PackedScene" uid="uid://ywlg61namnse" path="res://scenes/trail.tscn" id="6_dkwcy"]
+[ext_resource type="Texture2D" uid="uid://cs4wmp6atgdqa" path="res://weapons/sprites/sniper.png" id="7_2jfg3"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8ul1i"]
+radius = 3.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2tcmy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_8nnri")
+}],
+"loop": true,
+"name": &"airstrike",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_b4xdg")
+}],
+"loop": true,
+"name": &"breaker",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_padca")
+}],
+"loop": true,
+"name": &"grenade",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_p4ewr")
+}],
+"loop": true,
+"name": &"projectile",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_2jfg3")
+}],
+"loop": true,
+"name": &"sniper",
+"speed": 0.0
+}]
+
+[node name="projectile" type="Node2D" groups=["projectiles"]]
+script = ExtResource("1_nq1kx")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("2_p4ewr")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_8ul1i")
+
+[node name="Trail" parent="." instance=ExtResource("6_dkwcy")]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+sprite_frames = SubResource("SpriteFrames_2tcmy")
+animation = &"sniper"

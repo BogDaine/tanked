@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://c7idmnluc1q8a"]
+
+[ext_resource type="PackedScene" uid="uid://cailetylgy746" path="res://Map.tscn" id="1_4kxqu"]
+[ext_resource type="Script" path="res://testgrounds.gd" id="1_g00vn"]
+[ext_resource type="PackedScene" uid="uid://b7dtjp3fqs0vi" path="res://player.tscn" id="4_a3b0r"]
+[ext_resource type="PackedScene" uid="uid://bqghdqiw48ex8" path="res://hud.tscn" id="4_bvsyk"]
+
+[node name="Node" type="SubViewport"]
+size_2d_override_stretch = true
+script = ExtResource("1_g00vn")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(552, 305)
+anchor_mode = 0
+ignore_rotation = false
+zoom = Vector2(3.115, 3.115)
+
+[node name="Map" parent="." instance=ExtResource("1_4kxqu")]
+
+[node name="HUD" parent="." instance=ExtResource("4_bvsyk")]
+
+[node name="player" parent="." instance=ExtResource("4_a3b0r")]
+position = Vector2(1030, 258)
+
+[node name="JoinBtn" type="Button" parent="."]
+offset_left = 172.0
+offset_top = 6.0
+offset_right = 215.0
+offset_bottom = 37.0
+text = "JOIN"
+
+[node name="HostBtn" type="Button" parent="."]
+offset_left = 76.0
+offset_top = 5.0
+offset_right = 127.0
+offset_bottom = 36.0
+text = "HOST"

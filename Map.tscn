@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://cailetylgy746"]
+
+[ext_resource type="Script" path="res://map.gd" id="1_ipksl"]
+[ext_resource type="Texture2D" uid="uid://btxpj73tslpm" path="res://FG.png" id="2_vnro6"]
+[ext_resource type="Script" path="res://collision.gd" id="3_s58bs"]
+
+[sub_resource type="Shader" id="Shader_m3r75"]
+code = "shader_type canvas_item;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	vec4 baseColor = texture(TEXTURE,UV);
+	//vec4 blendColor = texture(SCREEN_TEXTURE,SCREEN_UV);
+
+	COLOR = baseColor;
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4l531"]
+shader = SubResource("Shader_m3r75")
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_atbv6"]
+properties/0/path = NodePath(".:seed")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="Map" type="Node2D"]
+z_index = -1
+script = ExtResource("1_ipksl")
+
+[node name="FG" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_4l531")
+texture = ExtResource("2_vnro6")
+centered = false
+
+[node name="Collision" type="Node" parent="."]
+script = ExtResource("3_s58bs")
+
+[node name="Bounds" type="Area2D" parent="Collision"]
+unique_name_in_owner = true
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_atbv6")

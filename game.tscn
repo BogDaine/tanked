@@ -1,0 +1,89 @@
+[gd_scene load_steps=10 format=3 uid="uid://cnaf4y4pmmcdm"]
+
+[ext_resource type="Script" path="res://game.gd" id="1_iyap7"]
+[ext_resource type="PackedScene" uid="uid://ox3i45ylikc6" path="res://mp_tests.tscn" id="2_o36qm"]
+[ext_resource type="Script" path="res://players_spawn.gd" id="3_1negk"]
+[ext_resource type="PackedScene" uid="uid://dt62suw5wrog0" path="res://PlayerUI.tscn" id="3_8urs0"]
+[ext_resource type="Texture2D" uid="uid://du3ob70mrutxn" path="res://tank1.png" id="4_crtmy"]
+[ext_resource type="Shader" path="res://shaders/ScreenShake.gdshader" id="4_ptqc7"]
+[ext_resource type="Script" path="res://scripts/screen_shaker.gd" id="5_vbis5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kp0di"]
+shader = ExtResource("4_ptqc7")
+shader_parameter/shake = false
+shader_parameter/amplitude = 0.01
+shader_parameter/speed = 64.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_lx2it"]
+
+[node name="game" type="Node"]
+script = ExtResource("1_iyap7")
+
+[node name="MainCamera" type="Camera2D" parent="."]
+unique_name_in_owner = true
+anchor_mode = 0
+
+[node name="PlayersSpawn" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_1negk")
+
+[node name="MapSpawn" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="MpUI" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+
+[node name="Effects" type="CanvasLayer" parent="."]
+
+[node name="ScreenShaker" type="TextureRect" parent="Effects"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_kp0di")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -384.0
+offset_top = -150.0
+offset_right = 384.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_crtmy")
+script = ExtResource("5_vbis5")
+
+[node name="LocalUI" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+
+[node name="PlayerUI" parent="LocalUI" instance=ExtResource("3_8urs0")]
+unique_name_in_owner = true
+visible = false
+
+[node name="mp_tests" parent="LocalUI" instance=ExtResource("2_o36qm")]
+unique_name_in_owner = true
+
+[node name="WeaponSpawn" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_lx2it")
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://multiplayer_player.tscn")
+spawn_path = NodePath("../PlayersSpawn")
+
+[node name="MapSpawner" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath("../MapSpawn")
+spawn_limit = 1
+
+[node name="WeaponSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://mp_weapon.tscn")
+spawn_path = NodePath("../WeaponSpawn")
+
+[node name="ScoreUISpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://team_score_ui.tscn")
+spawn_path = NodePath("../MpUI")
+
+[node name="FloatingMessages" type="Node" parent="."]
+unique_name_in_owner = true
+
+[connection signal="child_entered_tree" from="PlayersSpawn" to="PlayersSpawn" method="_on_child_entered_tree"]
+[connection signal="game_start" from="LocalUI/mp_tests" to="." method="_on_game_start"]

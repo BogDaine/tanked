@@ -1,0 +1,81 @@
+[gd_scene load_steps=2 format=3 uid="uid://dt62suw5wrog0"]
+
+[ext_resource type="Script" path="res://player_ui.gd" id="1_0ftr5"]
+
+[node name="PlayerUI" type="Control"]
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -132.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("1_0ftr5")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Panel/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "label :)"
+
+[node name="StrengthLabel" type="Label" parent="Panel/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "power"
+
+[node name="StrengthSlider" type="HSlider" parent="Panel/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+step = 0.1
+scrollable = false
+
+[node name="FireBtn" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+text = "FIRE"
+
+[node name="SpinBox" type="SpinBox" parent="Panel/HBoxContainer"]
+layout_mode = 2
+
+[node name="WeaponList" type="ItemList" parent="Panel/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+allow_search = false
+max_columns = 6
+
+[connection signal="mouse_entered" from="Panel" to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Panel" to="." method="_on_mouse_exited"]
+[connection signal="mouse_entered" from="Panel/HBoxContainer/VBoxContainer/StrengthSlider" to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/HBoxContainer/VBoxContainer/StrengthSlider" to="." method="_on_mouse_exited"]
+[connection signal="value_changed" from="Panel/HBoxContainer/VBoxContainer/StrengthSlider" to="." method="_on_strength_slider_value_changed"]
+[connection signal="mouse_entered" from="Panel/HBoxContainer/FireBtn" to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/HBoxContainer/FireBtn" to="." method="_on_mouse_exited"]
+[connection signal="pressed" from="Panel/HBoxContainer/FireBtn" to="." method="_on_fire_btn_pressed"]
+[connection signal="mouse_entered" from="Panel/HBoxContainer/WeaponList" to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/HBoxContainer/WeaponList" to="." method="_on_mouse_exited"]

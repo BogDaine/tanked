@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://ywlg61namnse"]
+
+[ext_resource type="Script" path="res://scripts/trail.gd" id="1_emswy"]
+[ext_resource type="Shader" path="res://shaders/trail.gdshader" id="1_j2hbh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iat05"]
+shader = ExtResource("1_j2hbh")
+
+[node name="Trail" type="Line2D"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_iat05")
+texture_mode = 2
+script = ExtResource("1_emswy")

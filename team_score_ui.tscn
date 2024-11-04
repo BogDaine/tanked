@@ -1,0 +1,50 @@
+[gd_scene load_steps=3 format=3 uid="uid://dpu4h2fyls4ge"]
+
+[ext_resource type="Script" path="res://team_score_ui.gd" id="1_o3jw6"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_eop8l"]
+properties/0/path = NodePath(".:score0")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:score1")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:scores_changed")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[node name="TeamScoreUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o3jw6")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_eop8l")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="ScoreLabel1" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="Label3" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = " - "
+
+[node name="ScoreLabel2" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"

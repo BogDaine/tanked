@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4u4y7bcqoqu4"]
+
+[ext_resource type="Script" path="res://weapons/scripts/grenade.gd" id="1_jlsgb"]
+
+[node name="Grenade" type="Node"]
+script = ExtResource("1_jlsgb")

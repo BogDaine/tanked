@@ -1,0 +1,12 @@
+[gd_scene load_steps=4 format=3 uid="uid://buen84ihne4re"]
+
+[ext_resource type="Shader" path="res://shaders/player_marker.gdshader" id="1_eaxjd"]
+[ext_resource type="Texture2D" uid="uid://dubel50wb0oli" path="res://textures/triangle_green.png" id="2_xctub"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5o5mo"]
+shader = ExtResource("1_eaxjd")
+
+[node name="PlayerMarker" type="Sprite2D"]
+material = SubResource("ShaderMaterial_5o5mo")
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_xctub")

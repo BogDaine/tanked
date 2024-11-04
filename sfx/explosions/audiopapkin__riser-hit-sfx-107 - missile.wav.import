@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cns26eghbv4kr"
+path="res://.godot/imported/audiopapkin__riser-hit-sfx-107 - missile.wav-2effe88e0d5c10b895f0e420bd04648f.sample"
+
+[deps]
+
+source_file="res://sfx/explosions/audiopapkin__riser-hit-sfx-107 - missile.wav"
+dest_files=["res://.godot/imported/audiopapkin__riser-hit-sfx-107 - missile.wav-2effe88e0d5c10b895f0e420bd04648f.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

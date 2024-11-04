@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7dtjp3fqs0vi"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_cunce"]
+[ext_resource type="Texture2D" uid="uid://du3ob70mrutxn" path="res://tank1.png" id="1_hjst1"]
+
+[node name="player" type="Node2D"]
+script = ExtResource("1_cunce")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -16.32)
+texture = ExtResource("1_hjst1")

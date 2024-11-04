@@ -1,0 +1,32 @@
+[gd_scene load_steps=7 format=3 uid="uid://dommb6vymej1p"]
+
+[ext_resource type="Script" path="res://scripts/sound_node.gd" id="1_7ar4g"]
+[ext_resource type="AudioStream" uid="uid://ddh4hi2gkmwxq" path="res://sfx/gunshots/21100354__gunshot.wav" id="2_iv6gf"]
+[ext_resource type="AudioStream" uid="uid://614i8enohih" path="res://sfx/explosions/651532_h2p34_explode-1-small.wav" id="3_78a6n"]
+[ext_resource type="AudioStream" uid="uid://bmiol8655mux8" path="res://sfx/bounce/jonnyruss01_click_1_softer.wav" id="4_suc1q"]
+[ext_resource type="AudioStream" uid="uid://bi4ampn7b2fh4" path="res://sfx/out_of_bounds/swing-stick-30532.wav" id="5_6xgum"]
+[ext_resource type="AudioStream" uid="uid://3gdwmvgn0wm3" path="res://sfx/woosh/hadahector__electric-woosh.wav" id="6_dkox3"]
+
+[node name="SoundNode" type="Node"]
+script = ExtResource("1_7ar4g")
+
+[node name="Shoot_normal" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("2_iv6gf")
+max_polyphony = 5
+
+[node name="Explosion_normal" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("3_78a6n")
+
+[node name="Bounce1" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("4_suc1q")
+
+[node name="OutOfBounds1" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("5_6xgum")
+
+[node name="Split" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("6_dkox3")

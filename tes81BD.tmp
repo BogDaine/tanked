@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://c7idmnluc1q8a"]
+
+[ext_resource type="PackedScene" uid="uid://cailetylgy746" path="res://Map.tscn" id="1_4kxqu"]
+[ext_resource type="Script" path="res://testgrounds.gd" id="1_g00vn"]
+[ext_resource type="PackedScene" uid="uid://b7dtjp3fqs0vi" path="res://player.tscn" id="4_a3b0r"]
+
+[node name="Node" type="Node"]
+script = ExtResource("1_g00vn")
+
+[node name="Map" parent="." instance=ExtResource("1_4kxqu")]
+
+[node name="player" parent="." instance=ExtResource("4_a3b0r")]
+position = Vector2(1030, 258)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(575, 324)
+offset = Vector2(11.975, 0)
+zoom = Vector2(8.135, 8.135)

@@ -1,0 +1,113 @@
+[gd_scene load_steps=8 format=3 uid="uid://b33v8mswr6swv"]
+
+[ext_resource type="Script" path="res://multiplayer_player.gd" id="1_mo03k"]
+[ext_resource type="Texture2D" uid="uid://du3ob70mrutxn" path="res://tank1.png" id="2_fucl0"]
+[ext_resource type="PackedScene" uid="uid://buen84ihne4re" path="res://scenes/player_marker.tscn" id="2_na8ul"]
+[ext_resource type="Script" path="res://multiplayer_input.gd" id="3_u4b20"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ddl8c"]
+radius = 11.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_x3ny1"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:id")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:_max_shoot_strength")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:_turret_pos")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath(".:_turret_length")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath(".:_fuel")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath(".:_speed")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+properties/7/path = NodePath(".:p_name")
+properties/7/spawn = true
+properties/7/replication_mode = 1
+properties/8/path = NodePath(".:points")
+properties/8/spawn = true
+properties/8/replication_mode = 1
+properties/9/path = NodePath(".:disabled")
+properties/9/spawn = true
+properties/9/replication_mode = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_y22bi"]
+properties/0/path = NodePath("MultiplayerInput:input_dir")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("MultiplayerInput:_mouse_pos")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("MultiplayerInput:_aim_pos")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:_shoot_dir")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath(".:_shoot_angle")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath(".:_shoot_strength")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath(".:weapon_index")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+
+[node name="player" type="Node2D"]
+script = ExtResource("1_mo03k")
+
+[node name="PlayerMarker" parent="." instance=ExtResource("2_na8ul")]
+unique_name_in_owner = true
+position = Vector2(0, -18)
+offset = Vector2(0, -281.285)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -16.32)
+texture = ExtResource("2_fucl0")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+polygon = PackedVector2Array(-15, -3, -15, -11, -10, -16, 10, -16, 15, -11, 15, -3, 12, 0, -12, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, -8)
+shape = SubResource("CircleShape2D_ddl8c")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+unique_name_in_owner = true
+replication_config = SubResource("SceneReplicationConfig_x3ny1")
+
+[node name="MultiplayerInput" type="MultiplayerSynchronizer" parent="."]
+unique_name_in_owner = true
+replication_config = SubResource("SceneReplicationConfig_y22bi")
+script = ExtResource("3_u4b20")
+
+[node name="NameLabel" type="Label" parent="."]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -27.0
+offset_top = -71.0
+offset_right = 28.0
+offset_bottom = -48.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[connection signal="aim_pos_changed" from="MultiplayerInput" to="." method="on_aim_pos_changed"]
+[connection signal="shoot_signal" from="MultiplayerInput" to="." method="_on_shoot_signal"]

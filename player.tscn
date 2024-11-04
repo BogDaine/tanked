@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7dtjp3fqs0vi"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_cunce"]
+[ext_resource type="Texture2D" uid="uid://du3ob70mrutxn" path="res://tank1.png" id="1_hjst1"]
+
+[node name="player" type="Node2D"]
+script = ExtResource("1_cunce")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -16.32)
+texture = ExtResource("1_hjst1")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+polygon = PackedVector2Array(-15, -3, -15, -11, -10, -16, 10, -16, 15, -11, 15, -3, 12, 0, -12, 0)

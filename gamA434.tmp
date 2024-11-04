@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3 uid="uid://cnaf4y4pmmcdm"]
+
+[ext_resource type="Script" path="res://game.gd" id="1_iyap7"]
+[ext_resource type="PackedScene" uid="uid://ox3i45ylikc6" path="res://mp_tests.tscn" id="2_o36qm"]
+[ext_resource type="Script" path="res://players_spawn.gd" id="3_1negk"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_lx2it"]
+
+[node name="game" type="Node"]
+script = ExtResource("1_iyap7")
+
+[node name="mp_tests" parent="." instance=ExtResource("2_o36qm")]
+unique_name_in_owner = true
+
+[node name="PlayersSpawn" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_1negk")
+
+[node name="MapSpawn" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="WeaponSpawn" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="Projectiles" type="Node" parent="."]
+
+[node name="Explosions" type="Node" parent="."]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_lx2it")
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://multiplayer_player.tscn")
+spawn_path = NodePath("../PlayersSpawn")
+
+[node name="MapSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://Map.tscn")
+spawn_path = NodePath("../MapSpawn")
+spawn_limit = 1
+
+[node name="WeaponSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://mp_weapon.tscn")
+spawn_path = NodePath("../WeaponSpawn")
+
+[connection signal="game_start" from="mp_tests" to="." method="_on_game_start"]
+[connection signal="child_entered_tree" from="PlayersSpawn" to="PlayersSpawn" method="_on_child_entered_tree"]

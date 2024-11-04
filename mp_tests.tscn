@@ -1,0 +1,122 @@
+[gd_scene load_steps=2 format=3 uid="uid://ox3i45ylikc6"]
+
+[ext_resource type="Script" path="res://mp_tests.gd" id="1_5rqk5"]
+
+[node name="mp_tests" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5rqk5")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HSplitContainer" type="HSplitContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="VBoxContainer" parent="Panel/HSplitContainer"]
+custom_minimum_size = Vector2(144, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/HSplitContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 19.465)
+layout_mode = 2
+text = "players"
+horizontal_alignment = 1
+
+[node name="PlayerNameList" type="ItemList" parent="Panel/HSplitContainer/HBoxContainer"]
+layout_mode = 2
+auto_height = true
+
+[node name="VSplitContainer" type="VSplitContainer" parent="Panel/HSplitContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/HSplitContainer/VSplitContainer"]
+custom_minimum_size = Vector2(0, 53.38)
+layout_mode = 2
+
+[node name="HostBtn" type="Button" parent="Panel/HSplitContainer/VSplitContainer/HBoxContainer"]
+layout_mode = 2
+text = "host
+"
+
+[node name="ConnectBtn" type="Button" parent="Panel/HSplitContainer/VSplitContainer/HBoxContainer"]
+layout_mode = 2
+text = "connect"
+
+[node name="DisconnectBtn" type="Button" parent="Panel/HSplitContainer/VSplitContainer/HBoxContainer"]
+layout_mode = 2
+text = "disconnect
+"
+
+[node name="PlayerNameEdit" type="LineEdit" parent="Panel/HSplitContainer/VSplitContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+placeholder_text = "enter name"
+max_length = 32
+
+[node name="HostNameEdit" type="LineEdit" parent="Panel/HSplitContainer/VSplitContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "localhost"
+placeholder_text = "host name"
+max_length = 64
+
+[node name="PortEdit" type="LineEdit" parent="Panel/HSplitContainer/VSplitContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "8087"
+placeholder_text = "port"
+max_length = 64
+
+[node name="SettingsBtn" type="Button" parent="Panel/HSplitContainer/VSplitContainer/HBoxContainer"]
+layout_mode = 2
+text = "settings"
+
+[node name="StartBtn" type="Button" parent="Panel/HSplitContainer/VSplitContainer/HBoxContainer"]
+layout_mode = 2
+text = "start game"
+
+[node name="Panel" type="VSplitContainer" parent="Panel/HSplitContainer/VSplitContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/HSplitContainer/VSplitContainer/Panel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Messages" type="Label" parent="Panel/HSplitContainer/VSplitContainer/Panel/ScrollContainer"]
+custom_minimum_size = Vector2(0, 600)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/HSplitContainer/VSplitContainer/Panel"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="MsgEdit" type="TextEdit" parent="Panel/HSplitContainer/VSplitContainer/Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SendBtn" type="Button" parent="Panel/HSplitContainer/VSplitContainer/Panel/HBoxContainer"]
+layout_mode = 2
+text = "send"
+
+[connection signal="pressed" from="Panel/HSplitContainer/VSplitContainer/HBoxContainer/SettingsBtn" to="." method="_on_settings_btn_pressed"]
+[connection signal="pressed" from="Panel/HSplitContainer/VSplitContainer/HBoxContainer/StartBtn" to="." method="_on_start_btn_pressed"]

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cyxxgsnulv0hb"]
+
+[ext_resource type="Script" path="res://grenade_launcher.gd" id="1_tahmx"]
+
+[node name="GrenadeLauncher" type="Node"]
+script = ExtResource("1_tahmx")
