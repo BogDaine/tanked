@@ -37,7 +37,9 @@ var _max_slope:float = 10
 @export var _max_shoot_strength:float = 40
 @export var _turret_pos:Vector2 = Vector2(0, -8)
 @export var _turret_length:float = 21
-@export var _fuel = 100
+@export var _fuel:int = 255
+@export var max_fuel:int = 255
+@export var infinite_fuel = false
 @export var _speed:float = 1
 
 
@@ -48,7 +50,7 @@ var _gravity = Vector2(0, 0.3)
 var ignore_mouse:bool = false
 
 signal shoot(position:Vector2, direction:Vector2, strength:float, player:MultiplayerPlayer)
-
+signal shoot_valid(player:MultiplayerPlayer)
 #unused
 signal was_hit(player:Player, pts:int)
 
@@ -64,6 +66,14 @@ func _ready() -> void:
 	for i in range(GameGlobalsAutoload.weapon_descriptions.size()):
 		inventory.append(2)
 
+@rpc("authority", "call_local", "reliable")
+func set_ammo(index:int, ammo:int):
+	if index < inventory.size():
+		inventory[index] = ammo
+
+@rpc("authority", "call_local", "reliable")
+func shoot_is_valid():
+	shoot_valid.emit(self)
 
 func set_id(new_id:int):
 	id = new_id
@@ -99,6 +109,9 @@ func apply_input_move_test():
 	
 func apply_input_move():
 	
+	if !(infinite_fuel || _fuel > 0):
+		return
+	
 	var move_dir = %MultiplayerInput.input_dir
 	
 	if move_dir == 0:
@@ -110,6 +123,8 @@ func apply_input_move():
 		return
 		
 	var move_ok: bool = true
+
+	
 	while new_pos.y > 0 and collision_map.pixels[new_pos.x][new_pos.y] == true and move_ok:
 		if position.y - new_pos.y < _max_slope and new_pos.y > 1:
 			new_pos.y = new_pos.y-1
@@ -122,6 +137,8 @@ func apply_input_move():
 			
 	if move_ok:
 		position = new_pos
+		if !infinite_fuel:
+			_fuel -= 1
 		
 func input_shoot():
 	if Input.is_action_just_pressed("left_click"):

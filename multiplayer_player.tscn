@@ -39,6 +39,15 @@ properties/8/replication_mode = 1
 properties/9/path = NodePath(".:disabled")
 properties/9/spawn = true
 properties/9/replication_mode = 1
+properties/10/path = NodePath(".:inventory")
+properties/10/spawn = true
+properties/10/replication_mode = 1
+properties/11/path = NodePath(".:max_fuel")
+properties/11/spawn = true
+properties/11/replication_mode = 1
+properties/12/path = NodePath(".:infinite_fuel")
+properties/12/spawn = true
+properties/12/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_y22bi"]
 properties/0/path = NodePath("MultiplayerInput:input_dir")

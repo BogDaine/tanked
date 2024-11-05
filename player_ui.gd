@@ -2,29 +2,44 @@ class_name PlayerUI
 
 extends Control
 
-var _player:MultiplayerPlayer = null
+var infinite_weapons:bool = false
+var _player:MultiplayerPlayer = null:
+	set(value):
+		_player = value
+		_player.shoot_valid.connect(_on_player_shoot_valid)
 
 var _mouse_is_over:bool = false
 var _left_click_pressed:bool = false
 
 func _ready() -> void:
+	pass
+
+#@rpc("authority", "call_local", "reliable")
+func init():
 	setup_weapon_list()
 
 func setup_weapon_list():
 	var i:int = 0
 	for w in GameGlobalsAutoload.weapon_descriptions:
-		%WeaponList.add_item(w["name"], w["icon"])
+		%WeaponList.add_item(w["name"] + " - " + str(_player.inventory[i]), w["icon"])
 		%WeaponList.set_item_tooltip(i, w["tooltip"])
 		i+=1
 	%WeaponList.item_selected.connect(_on_weapon_selected)
 
 var old_strength = -1
+var old_fuel = -1
+
 func _process(delta: float) -> void:
 	if _player == null: return
 	if abs(old_strength - _player._shoot_strength) > 0.01:
 		old_strength = _player._shoot_strength
-		%StrengthLabel.text = str(_player._shoot_strength)
+		%StrengthLabel.text = "power - " + str(_player._shoot_strength)
 		%StrengthSlider.value = _player._shoot_strength/_player._max_shoot_strength * 100
+	
+	var fuel = _player._fuel
+	if abs(old_fuel - fuel) > 0:
+		old_fuel = fuel
+		%FuelLabel.text = "fuel - " + str(fuel)
 		
 func _on_fire_btn_pressed() -> void:
 	if _player == null: return
@@ -73,3 +88,13 @@ func _on_strength_slider_value_changed(value: float) -> void:
 	else:
 		_player._shoot_strength = value/100 * _player._max_shoot_strength
 		old_slider_value = value
+
+func _on_player_shoot_valid(p:MultiplayerPlayer):
+	#change ammo ammount in UI
+	var index = p.weapon_index
+	if index >= %WeaponList.item_count: return
+	var text:String =  %WeaponList.get_item_text(index)
+	var c_index = text.rfind("- ")
+	var erased:String = text.erase (c_index + 2, 30)
+	
+	%WeaponList.set_item_text(index, erased + str(p.inventory[index]))

@@ -6,8 +6,12 @@ var floating_label_scn = preload("res://FloatingLabel.tscn")
 var score_ui_scn = preload("res://team_score_ui.tscn")
 
 
-var take_turns:bool = false
-var infinite_weapons = true
+var take_turns:bool = true
+var infinite_weapons:bool = false
+var infinite_fuel:bool = false
+var max_fuel = 200
+var turn_limit = 10
+
 var turn = -1
 var turn_count = 0
 
@@ -49,6 +53,9 @@ func _on_game_start():
 	_on_host_game_started.rpc()
 	_score_ui = score_ui_scn.instantiate()
 	%MpUI.add_child(_score_ui, true)
+	
+	update_player_settings()
+	
 	if take_turns:
 		next_turn()
 
@@ -62,8 +69,19 @@ func _on_host_game_started():
 	var id = multiplayer.get_unique_id()
 	if _player_dict.has(id):
 		%PlayerUI._player = _player_dict[id]
+	
+	%PlayerUI.infinite_weapons = infinite_weapons
+	%PlayerUI.init()
 	set_only_playermarker_visible(id)
 
+func update_player_settings():
+	for key in _player_dict:
+		if !(_player_dict[key] is MultiplayerPlayer):
+			continue
+		var p:MultiplayerPlayer = _player_dict[key]
+		p.infinite_fuel = infinite_fuel
+		p.max_fuel = max_fuel
+		
 func fetch_players():
 	var players = %PlayersSpawn.get_children()
 	for p in players:
@@ -91,15 +109,22 @@ func _on_player_shoot(pos:Vector2, shoot_dir:Vector2, shoot_strength:float, play
 	if !check_player_inventory(player, index):
 		print("<_on_player_shoot> not enough ammo!")
 		return
+		
+	var shot:bool = false
 	if take_turns:
 		if player.team == turn:
 			spawn_local_weapon.rpc(pos, shoot_dir, shoot_strength, player.id, index)
 			player.disabled = true;
+			shot = true
 	else:
 		spawn_local_weapon.rpc(pos, shoot_dir, shoot_strength, player.id, index)
+		shot = true
 	
-	print(player.inventory[index])
-	if !infinite_weapons: player.inventory[index] -= 1
+	if shot:
+		if !infinite_weapons:
+			#player.inventory[index] -= 1
+			player.set_ammo.rpc(index, player.inventory[index]-1)
+		player.shoot_is_valid.rpc()
 
 @rpc("authority", "call_local", "reliable")
 func show_floating_message(message:String, pos:Vector2):
@@ -161,6 +186,12 @@ func set_team_playermarkers_visible(value:bool, team:int):
 	for id in _player_dict:
 		if _player_dict[id].team == team:
 			_player_dict[id].set_playermarker_visible.rpc(value)
+
+func refuel_team(team:int):
+	if !multiplayer.is_server(): return
+	for id in _player_dict:
+		if _player_dict[id].team == team:
+			_player_dict[id]._fuel = _player_dict[id].max_fuel
 			
 func set_team_players_disabled(value:bool, team:int):
 	if !multiplayer.is_server(): return
@@ -175,6 +206,8 @@ func next_turn():
 		set_team_playermarkers_visible(false, 0)
 		set_team_players_disabled(false, 1)
 		set_team_playermarkers_visible(true, 1)
+		
+		
 	else:
 		turn = 0
 		set_team_players_disabled(true, 1)
@@ -182,6 +215,8 @@ func next_turn():
 		set_team_players_disabled(false, 0)
 		set_team_playermarkers_visible(true, 0)
 	turn_count +=1
+	
+	refuel_team(turn)
 		
 func _process(delta: float) -> void:
 	var camera:Camera2D = GameGlobalsAutoload.camera;

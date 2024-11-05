@@ -35,10 +35,11 @@ alignment = 1
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="Panel/HBoxContainer/VBoxContainer"]
+[node name="FuelLabel" type="Label" parent="Panel/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-text = "label :)"
+text = "fuel - "
 
 [node name="StrengthLabel" type="Label" parent="Panel/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true

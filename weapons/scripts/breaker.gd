@@ -19,14 +19,14 @@ var exp_cnt = 0
 func print_explosion_count():
 	print("explosion count: " + str(exp_cnt))
 
-var split_limit = 0
+var split_limit = 3
 var split_cnt = 0
 func split(p:Projectile):
 	p.queue_free()
 	split_cnt+=1
 	#print("split <" + str(split_cnt) + ">")
-	var p_new1:Projectile = projectile.instantiate()
-	var p_new2:Projectile = projectile.instantiate()
+	var p_new1:Projectile = projectile_basic_scn.instantiate()
+	var p_new2:Projectile = projectile_basic_scn.instantiate()
 	map_projectile_to_default_sounds(p_new1)
 	map_projectile_to_default_sounds(p_new2)
 	_projectiles.append(p_new1)
