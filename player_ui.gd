@@ -29,6 +29,9 @@ func setup_weapon_list():
 var old_strength = -1
 var old_fuel = -1
 
+func reset():
+	%WeaponList.clear()
+
 func _process(delta: float) -> void:
 	if _player == null: return
 	if abs(old_strength - _player._shoot_strength) > 0.01:

@@ -7,13 +7,18 @@ var score_ui_scn = preload("res://team_score_ui.tscn")
 
 
 var take_turns:bool = true
+var start_turn: int = 0
 var infinite_weapons:bool = false
 var infinite_fuel:bool = false
 var max_fuel = 200
-var turn_limit = 10
+var turn_limit = 2
 
-var turn = -1
-var turn_count = 0
+var turn:int = -1
+var turn_count:int = 0
+var all_teams_turns:int = 0
+var team_count = 2
+
+var game_active:bool = false
 
 var _map:Map
 
@@ -50,14 +55,34 @@ func _on_game_start():
 	_team_scores[0] = 0
 	_team_scores[1] = 0
 	
-	_on_host_game_started.rpc()
+	
 	_score_ui = score_ui_scn.instantiate()
 	%MpUI.add_child(_score_ui, true)
 	
-	update_player_settings()
+	turn_count = 0
+	turn = start_turn
 	
-	if take_turns:
-		next_turn()
+	if(take_turns):
+		_score_ui.set_turn_limit.rpc(turn_limit)
+		if turn == 1:
+			set_team_players_disabled(true, 0)
+			set_team_playermarkers_visible(false, 0)
+			set_team_players_disabled(false, 1)
+			set_team_playermarkers_visible(true, 1)		
+		else:
+			set_team_players_disabled(true, 1)
+			set_team_playermarkers_visible(false, 1)
+			set_team_players_disabled(false, 0)
+			set_team_playermarkers_visible(true, 0)
+	refuel_team(turn)
+	
+	update_player_settings()
+	game_active = true
+	
+	_on_host_game_started.rpc()
+
+func init_random_inventory():
+	pass
 
 @rpc("authority", "call_local", "reliable")
 func _on_host_game_started():
@@ -72,7 +97,8 @@ func _on_host_game_started():
 	
 	%PlayerUI.infinite_weapons = infinite_weapons
 	%PlayerUI.init()
-	set_only_playermarker_visible(id)
+	
+	#set_only_playermarker_visible(id)
 
 func update_player_settings():
 	for key in _player_dict:
@@ -151,7 +177,6 @@ func spawn_local_weapon(pos:Vector2, shoot_dir:Vector2, shoot_strength:float, pl
 	w.init(shoot_dir.normalized() * shoot_strength, pos, GameGlobalsAutoload._map._collision, player)
 	add_child(w)
 
-
 func _on_weapon_explode(x:float, y:float, radius:float, destroy:bool):
 	if destroy:
 		GameGlobalsAutoload._map.explode(x, y, radius)
@@ -165,6 +190,7 @@ func _on_damage(player1:MultiplayerPlayer, player2:MultiplayerPlayer, _weapon:We
 		actual_pts *= -1
 	#print(player1, " hit ", player2, " for ", actual_pts, " points!")
 	_score_ui.add_points.rpc(actual_pts, player1.team)
+	_team_scores[player1.team] += actual_pts
 	show_floating_message.rpc(str(actual_pts), player2.position + Vector2.UP * 16)
 	
 func _on_weapon_done(w:Weapon):
@@ -214,13 +240,58 @@ func next_turn():
 		set_team_playermarkers_visible(false, 1)
 		set_team_players_disabled(false, 0)
 		set_team_playermarkers_visible(true, 0)
-	turn_count +=1
 	
 	refuel_team(turn)
+	
+	turn_count +=1
+	
+	#print("turn count: " + str(turn_count))
 		
-func _process(delta: float) -> void:
-	var camera:Camera2D = GameGlobalsAutoload.camera;
+	all_teams_turns = turn_count/team_count
+	_score_ui.set_turn.rpc(all_teams_turns)
+
+func check_game_end() -> bool:
+	if take_turns && turn_count/team_count >= turn_limit:
+		return true
+	
+	return false
+
+func host_game_end():
+	game_active = false
+	
+	_score_ui.queue_free()
+	on_game_terminated.rpc()
+	
+
+@rpc("authority", "call_local", "reliable")
+func on_game_terminated():
+	_map.queue_free()
+	
+	for k in _player_dict:
+		_player_dict[k].queue_free()
+	
+	_player_dict.clear()
+	%mp_tests.show()
+	%PlayerUI.hide()
+	%PlayerUI.reset()
+	
+var frames:int = 0
+func _process(_delta: float) -> void:
+	#var camera:Camera2D = GameGlobalsAutoload.camera;
 	#camera.position.x += 1 * delta
+	
+	if !game_active: return
+	frames += 1
+	if frames == 10:
+		frames = 0
+		var peer = multiplayer.multiplayer_peer
+		if peer == null:
+			return
+		if !multiplayer.is_server():
+			return
+		if check_game_end():
+			print("Game over! Scores: " + str(_team_scores))
+			host_game_end()
 
 @rpc("authority", "reliable", "call_local")
 func gen_map(seed:int = 0):
